@@ -12,8 +12,11 @@ export const config = {
   useCdn: process.env.NODE_ENV === "production"
 }
 
+// Set up the client for fetching data in getPtops page functions
 export const sanityClient = createClient(config);
 
+// Set up a helper function for generating Image URL
 export const urlFor = source => createImageUrlBuilder(config).image(source);
 
+// Helper function for using the current logged in user account
 export const useCurrentUser = createCurrentUserHook(config);
