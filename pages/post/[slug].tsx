@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import Header from '../../components/Header';
 import { sanityClient, urlFor } from '../../sanity';
 import { Post } from '../../typings';
+import { useState } from 'react';
 
 interface Props {
   post: Post
@@ -17,6 +18,8 @@ interface IFormInput {
 }
 
 function Post({ post }: Props) {
+  const [submitted, setSubmitted] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -30,8 +33,10 @@ function Post({ post }: Props) {
         body: JSON.stringify(data),
       })
       console.log(request, 'request from slug');
+      setSubmitted(true);
     } catch (error) {
       console.log(error);
+      setSubmitted(false);
     }
     
   }
@@ -85,7 +90,15 @@ function Post({ post }: Props) {
       </article>
 
       <hr className="max-w-lg my-5 mx-auto border border-yellow-500" />
+      
+      {submitted ? (
+        <div
+        className="flex flex-col p-10 my-10 bg-yellow-500 text-white max-w-2xl mx-auto">
+          <h3 className="text-3xl font-bold">Thank you for submitting your comment</h3>
+          <p>Upon approval, it will appear below!</p>
+        </div>
 
+      ): (
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col p-5 max-w-2xl mx-auto mb-10">
         <h3 className="text-sm text-yellow-500">The article's cool init?</h3>
         <h4 className="text-3xl font-bold">Drop a comment</h4>
@@ -139,6 +152,7 @@ function Post({ post }: Props) {
           value="Submit" 
         />
       </form>
+      )}
     </main>
   );
 }
