@@ -29,7 +29,7 @@ function Post({ post }: Props) {
         method: 'POST',
         body: JSON.stringify(data),
       })
-      console.log(request);
+      console.log(request, 'request from slug');
     } catch (error) {
       console.log(error);
     }

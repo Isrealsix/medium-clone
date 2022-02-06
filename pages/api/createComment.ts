@@ -13,9 +13,25 @@ const config = {
 
 const client = sanityClient(config)
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  res.status(200).json({ name: 'John Doe' })
+  const { _id, name, email, comment } = JSON.parse(req.body);
+  try {
+    await client.create({
+      _type: "comment",
+      post: {
+        _type: "reference",
+        _ref: _id,
+      },
+      name,
+      email,
+      comment,
+    })
+  } catch (error) {
+    return res.status(500).json({ message: 'Failed to submit comment', error})
+  }
+  console.log("Comment Submitted");
+  return res.status(200).json({ message: 'Successfully Submitted!' })
 }
